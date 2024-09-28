@@ -11,6 +11,13 @@ import os
 from omegaconf import DictConfig
 from pathlib import Path
 
+def get_device():
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    else:
+        print("GPU not available, using CPU instead.")
+        return torch.device("cpu")
+
 @hydra.main(config_path="../configs", config_name="config")
 def main(cfg: DictConfig):
     # Get the absolute path of the script
@@ -23,6 +30,10 @@ def main(cfg: DictConfig):
     print(f"Data directory exists: {os.path.exists(data_dir)}")
 
     wandb.init()
+
+    # Get device
+    device = get_device()
+    print(f"Using device: {device}")
 
     # Get dataset
     dataset = get_dataset(str(data_dir), cfg.sequence_length, cfg.chunk_size)
@@ -47,7 +58,7 @@ def main(cfg: DictConfig):
         n_layer=cfg.n_layer,
         n_head=cfg.n_head,
         chunk_size=cfg.chunk_size
-    )
+    ).to(device)  # Move model to GPU
 
     # print model summary
     print(model)
@@ -72,7 +83,8 @@ def main(cfg: DictConfig):
         get_batch=lambda batch_size: next(iter(data_loader)),
         loss_fn=loss_fn,
         chunk_size=cfg.chunk_size,
-        data_loader=data_loader
+        data_loader=data_loader,
+        device=device  # Pass device to trainer
     )
 
     # Training loop
