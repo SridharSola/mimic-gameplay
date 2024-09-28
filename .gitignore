@@ -1,0 +1,46 @@
+# Ignore CSV and safetensor files in the demos directory
+data/demos/**/*.csv
+data/demos/**/*.safetensors
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore error logs
+*.log
+error_log*
+
+# Ignore egg-info directory and its contents
+*.egg-info/
+*.egg-info/*
+
+# Ignore Hydra output directory
+outputs/
+
+# Ignore wandb directory
+wandb/
+
+# Ignore model checkpoint files
+*.pth
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore virtual environment directories
+venv/
+env/
+.env/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore any local configuration files
+config.local.yaml
